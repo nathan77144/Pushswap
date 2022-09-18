@@ -1,8 +1,10 @@
 <?php
 
-
-$la = [2, 1 , 3,6, 5, 8];
+$la = [];
 $lb = [];
+
+/*global $la;
+global $lb;*/
 
 
 function sa(&$arr)
@@ -18,7 +20,8 @@ function sa(&$arr)
 
         //print_r($arr);
         //echo "sa apres";
-    }  echo " sa ";
+    }
+    echo " sa ";
 }
 
 //sa($la);
@@ -64,21 +67,25 @@ function pa(&$la, &$lb)
     } else echo "";
 }
 
-function pb($la, $lb)
+function pb(&$la, &$lb)
 {
-    // print_r($la);
-    // print_r($lb);
+    echo " pb ";
+    //var_dump(count($la));
     if (count($la) > 0) {
-
-        array_unshift($lb, $la[0]);
-        array_shift($la);
+        //var_dump($la,$lb);
+        //if(!empty($lb))array_unshift($lb, $la[0]);
+        array_push($lb, $la[0]);
+        if (!empty($la)) array_shift($la);
     }
-    // print_r($la);
-    // print_r($lb);
-    //else echo " rien";
+    //var_dump("Fin PB", $la,$lb);
 }
 
-pb($la, $lb);
+// print_r($la);
+// print_r($lb);
+//else echo " rien";
+
+
+// pb($la, $lb);
 
 function ra(&$la)
 {
@@ -91,7 +98,7 @@ function ra(&$la)
     }
     //print_r($la); 
     //echo "ra apres";
-     echo " ra ";
+    echo " ra ";
 }
 
 //ra($la);
@@ -167,27 +174,61 @@ function rrr($la, $lb)
     }
 }
 
-
-
-function Algorithme($a, $b)
+function Algorithme($argc, $argv, &$la, &$lb)
 {
-    //print_r($a);
 
-    for ($i = 0; $i < sizeof($a) - 1; $i++) {
-
-        //print_r("deb", $i);
-
-        if ($a[0] > $a[1]) {   //les deux premiere elements ne sont pas dans le bonne ordre, alors on les inverses
-
-            sa($a);
-            //print_r($i);
-        }
-        ra($a);
-        //print_r($a);
+    //je vais initialiser mon tableauc la avec les arguments du script
+    for ($i = 0; $i < $argc - 1; $i++) {
+        $la[$i] = $argv[$i + 1];
     }
-    //var_dump($a);
-    ra($a);
-    //var_dump($a);
+    // Tant que le tableau la n'est pas vide je compare le premier elément au minimum. 
+    //Si c'est OK alors j'écris cet élément dans le tableau lb et supprime le premier element de la : c'est la fonction pb qui fait cela. 
+    //Sinon je décale juste le premier élement de la à la fin par la fonction ra.
+    //var_dump("deb",$la);
+
+    while (!empty($la)) {
+        //var_dump("rerer",$la[0],min($la));
+        if ($la[0] == min($la)) { //le premier element du tabelaux est le plus petit , je le met dans lb
+            //var_dump("ddd",$lb);
+            pb($la, $lb);
+        } else {
+            //var_dump("aaa",$la);
+            ra($la);
+        }
+    }
+    // je dois maintenant recopier lb dans la
+    for ($i = 0; $i < count($lb); $i++) $la[$i] = $lb[$i];
 }
 
-Algorithme($la, $lb);
+Algorithme($argc, $argv, $la, $lb);
+print_r($la);
+//var_dump("A la fin le tableau la vaut ",$la);
+
+
+// function Algorithme($argc,$argv,&$la,&$lb)
+// {
+
+//     //print_r($a);
+//     //var_dump($argc,$argv)
+//     //je vais initialiser mon tableauc la avec les arguments du script
+//     for($i= 0; $i < $argc - 1; $i++){
+//         $la[$i]=$argv[$i +1];
+//     }
+//     //var_dump("deb",$la);
+//     while(!empty($la)){ 
+//         var_dump("rerer",$la[0],min($la));
+//         if($la[0] == min($la)){ //le premier element du tabelaux est le plus petit , je le met dans lb
+//            var_dump("ddd",$lb);
+//            pb($la,$lb);
+//            //array_shift($la);
+//         } else 
+//         {
+//             var_dump("aaa",$la);
+//             ra($la);
+//         }
+//     }
+   
+// }
+
+// Algorithme($argc,$argv,$la,$lb);
+// var_dump($la);
